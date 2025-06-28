@@ -15,7 +15,9 @@ function getIndex(index, arr) {
 
 function getSubsets(index, arr = [], ans = [], res = []){
     if(index === arr.length){
-        ans.push([...res]);
+        if(res.length){
+          ans.push([...res]);
+        }
         return;
     }
     res.push(arr[index]);
@@ -32,6 +34,7 @@ var subsetsWithDup = function(nums) {
     let res = [];
     let index = 0;
     nums.sort((a, b) => a - b);
+    ans.push([]);
     getSubsets(index, nums, ans,res);
     return ans;
 };
