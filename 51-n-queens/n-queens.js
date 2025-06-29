@@ -5,7 +5,7 @@
 
 function solve(col, board, ans, leftRow, upperDiagonal, LowerDiagonal, n) {
   if (col === n) {
-    ans.push(board.map((row) => row.join(",").split(",").join("")));
+    ans.push(board.map((row) => row.join("")));
     return;
   }
   for (let row = 0; row < n; row++) {
