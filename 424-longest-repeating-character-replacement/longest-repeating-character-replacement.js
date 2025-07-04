@@ -32,7 +32,7 @@ var characterReplacement = function(s, k) {
     m.set(s[r], m.get(s[r]) ? m.get(s[r]) + 1 : 1);
     maxfreq = getMaxFreq(m);
 
-    while (r - l + 1 - maxfreq > k) {
+    if (r - l + 1 - maxfreq > k) {
       m.set(s[l], m.get(s[l]) - 1);
       l++;
       maxfreq = getMaxFreq(m);
