@@ -3,19 +3,26 @@
  * @return {boolean}
  */
 
-let checkIfBipartite = function(node,color,graph){
-    let queue = [];
-    queue.push(node);
-    while (queue.length) {
-      let parent = queue.shift();
-      let parentColor = color[parent];
-      let childArray = graph[parent]
-      for (let i = 0; i < childArray.length; i++) {
-        if (color[childArray[i]] === -1) {
-          color[childArray[i]] = parentColor === 1 ? 0 : 1;
-          queue.push(childArray[i]);
-        } else {
-          if (color[childArray[i]] === parentColor) return false;
+let checkIfBipartite = function(graph, n){
+    let color = new Array(n).fill(null).map(()=>-1);
+      for (let i = 0; i < n; i++) {
+      if (color[i] === -1) {
+        let queue = [];
+        queue.push(i);
+        color[i] = 0;
+        let index = 0;
+        while (index < queue.length) {
+          let parent = queue[index];
+          index++;
+          let parentColor = color[parent];
+          for (const node of graph[parent]) {
+            if (color[node] === -1) {
+              color[node] = parentColor === 1 ? 0 : 1;
+              queue.push(node);
+            } else {
+              if (color[node] === parentColor) return false;
+            }
+          }
         }
       }
     }
@@ -25,13 +32,6 @@ let checkIfBipartite = function(node,color,graph){
 
 var isBipartite = function(graph) {
     let n = graph.length;
-    let color = new Array(n).fill(null).map(()=>-1);
-    for(let i=0;i<n-1;i++){
-          if(color[i]===-1){
-            if(!checkIfBipartite(i,color,graph)){
-            return false;
-        }
-      }
-    }
-    return true;
+    let ans = checkIfBipartite(graph, n)
+    return ans;
 };
