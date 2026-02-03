@@ -2,77 +2,57 @@
  * @param {number[][]} grid
  * @return {number}
  */
-function Bfs(row, coloumn, visited, grid) {
-  let m = grid.length;
-  let n = grid[0].length;
-  let queue = [];
-  queue.push([row, coloumn]);
-  visited[row][coloumn] = 1;
 
-  while (queue.length) {
-    const direction = [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-    ];
+function bfs(queue, visited, grid){
+    const n = grid.length;
+    const m = grid[0].length;
+    let step = 0;
 
-    const [currRow, currCol] = queue.shift();
-    for (const [delRow, delCol] of direction) {
-      const neigbourRow = delRow + currRow;
-      const neigbourCol = delCol + currCol;
-
-      if (
-        neigbourRow >= 0 &&
-        neigbourRow < m &&
-        neigbourCol >= 0 &&
-        neigbourCol < n &&
-        !visited[neigbourRow][neigbourCol] &&
-        grid[neigbourRow][neigbourCol] === 1
-      ) {
-        visited[neigbourRow][neigbourCol] = 1;
-        queue.push([neigbourRow, neigbourCol]);
-      }
+    while(step < queue.length){
+        const [r, c] = queue[step++];
+        const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+        for(const [dr, dc] of directions){
+        const nr = dr + r;
+        const nc = dc + c;
+        if (nr >= 0 && nr < n && nc >= 0 && nc < m && !visited[nr][nc]
+           && grid[nr][nc] === 1){
+            queue.push([nr, nc]);
+            visited[nr][nc] = true;
+        }
+     }
     }
-  }
+
 }
 
-var numEnclaves = function (grid) {
-  let m = grid.length;
-  let n = grid[0].length;
-  let count = 0;
-  let visited = Array.from({ length: m }, () => Array(n).fill(0));
+var numEnclaves = function(grid) {
+    const n = grid.length;
+    const m = grid[0].length;
+    const visited = Array.from({length:n}, () => Array(m).fill(false));
+    const queue = [];
+    let count = 0;
+    for(let i = 0; i<n; i++){
+        for(let j = 0; j<m; j++){
+            if(i === 0 || j === 0 || i === n-1 || j === m-1 ){
+                if(grid[i][j] === 1){
+                    queue.push([i,j]);
+                    visited[i][j] = true;
+                }
+            }
+        }
+    }
+       
+    bfs(queue, visited, grid);
 
-  // traverse the first row and last row
-
-  for (let j = 0; j < n; j++) {
-    if (!visited[0][j] && grid[0][j] === 1) {
-      Bfs(0, j, visited, grid);
+    for(let i = 0; i< n ;i++){
+        for(let j = 0; j<m; j++){
+            if(grid[i][j] === 1 && !visited[i][j]){
+                count++;
+            }
+        }
     }
 
-    if (!visited[m - 1][j] && grid[m - 1][j] === 1) {
-      Bfs(m - 1, j, visited, grid);
-    }
-  }
+    return count;
 
-  // traverse the first coloumn and last coloumn
 
-  for (let i = 0; i < m; i++) {
-    if (!visited[i][0] && grid[i][0] === 1) {
-      Bfs(i, 0, visited, grid);
-    }
 
-    if (!visited[i][n - 1] && grid[i][n - 1] === 1) {
-      Bfs(i, n - 1, visited, grid);
-    }
-  }
-
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      if (!visited[i][j] && grid[i][j] === 1) {
-        count++;
-      }
-    }
-  }
-  return count;
 };
