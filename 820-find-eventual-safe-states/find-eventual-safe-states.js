@@ -3,37 +3,26 @@
  * @return {number[]}
  */
 
-function getSafeStates(i, graph, visited, pathVisited, safeNodes){
-    visited[i] = true;
-    pathVisited[i] = true;
-    for(const node of graph[i] || []){
-        if(!visited[node]){
-            if(getSafeStates(node, graph, visited, pathVisited, safeNodes))return true;
-        }else if(pathVisited[node])return true;
+ function dfs(sr, adj, visited, result){
+        visited[sr] = 2;
+        for(const node of adj[sr]){
+            if(!visited[node]){
+                if(dfs(node, adj, visited, result)) return true;
+            }else if(visited[node] === 2)return true;
+        }
+        visited[sr] = 1;
+        result.push(sr);
+        return false;
     }
-
-    pathVisited[i] = false;
-    safeNodes[i] = true;
-    return false;
-}
-
 
 var eventualSafeNodes = function(graph) {
-    let n = graph.length;
-    let visited = new Array(n).fill(null).map(()=>false);
-    let pathVisited = new Array(n).fill(null).map(()=>false);
-    let safeNodes = new Array(n).fill(null).map(() => false);
-    let ans = [];
-
-    for(let i = 0 ; i<n; i++){
-        if(!visited[i]){
-            getSafeStates(i, graph, visited, pathVisited, safeNodes);
+    const n = graph.length;
+    const result = [];
+     const visited = new Array(n).fill(0);
+        for(let i = 0 ; i<n; i++){
+            if(!visited[i]){
+                dfs(i, graph, visited, result);
+            }
         }
-    }
-
-    for(let i = 0 ; i<n; i++){
-        if(safeNodes[i])ans.push(i);
-    }
-    return ans;
-
+        return result.sort((a,b) => a - b);
 };
