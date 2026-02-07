@@ -5,46 +5,32 @@
  * @return {number}
  */
 
-function wordLadder(s, beginWord, endWord) {
-    if (!s.has(endWord)) return 0;
 
-    let queue = [];
-    let index = 0;
-    queue.push([beginWord, 1]);
 
-    while (index < queue.length) {
-      let [word, frequency] = queue[index];
-      index++;
-
-      let charArray = word.split("");
-
-      for (let i = 0; i < charArray.length; i++) {
-        let originalChar = charArray[i];
-
-        for (let c = 97; c <= 122; c++) {
-          let ch = String.fromCharCode(c);
-          if (ch === originalChar) continue;
-
-          charArray[i] = ch;
-          let newWord = charArray.join("");
-
-          if (s.has(newWord)) {
-            if (newWord === endWord) return frequency + 1;
-
-            queue.push([newWord, frequency + 1]);
-            s.delete(newWord);
-          }
-        }
-
-        charArray[i] = originalChar;
-      }
-    }
-
-    return 0;
-  }
 
 var ladderLength = function(beginWord, endWord, wordList) {
-        let s = new Set([...wordList]);
-        let ans = wordLadder(s, beginWord, endWord);
-        return ans;
+    const set = new Set(wordList);
+    if(!set.has(endWord)) return 0;
+    const queue = [[beginWord, 1]];
+    let start = 0;
+    while(start < queue.length){
+        const [word, level] = queue[start++];
+        if(word === endWord) return level;
+        const wordArr = word.split('');
+        for(let i = 0; i<word.length; i++){
+            const originalChar = word[i];
+            for(let charCode = 97; charCode <= 122; charCode++) {
+                const newChar = String.fromCharCode(charCode);
+                if(newChar === originalChar)continue;
+                wordArr[i] = newChar;
+                const newWord = wordArr.join("");
+                if(set.has(newWord)){
+                    queue.push([newWord, level+1]);
+                    set.delete(newWord);
+                }
+            }
+            wordArr[i] = originalChar;
+        }
+    }
+    return 0;
 };
