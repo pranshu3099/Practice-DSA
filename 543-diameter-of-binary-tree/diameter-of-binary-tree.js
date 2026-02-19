@@ -15,8 +15,8 @@ function getDiameter(root){
     let maxi = 0;
     function calculate(root){
     if(root === null) return 0;
-    let lh = calculate(root.left, maxi);
-    let rh = calculate(root.right, maxi);
+    let lh = calculate(root.left);
+    let rh = calculate(root.right);
     maxi = Math.max(maxi, lh + rh);
     return 1 + Math.max(lh, rh);
     }
