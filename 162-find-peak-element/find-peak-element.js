@@ -3,32 +3,11 @@
  * @return {number}
  */
 var findPeakElement = function(nums) {
- let n = nums.length
- if (n === 1) return 0;
-  let low = 0;
-  let high = n - 1;
-  if (nums[low] >= nums[low + 1]) {
-    return low;
-  }
-  if (nums[high] >= nums[high - 1]) {
-    ans = nums[high];
-    return high;
-  }
-  while (low <= high) {
-    let middle = Math.floor((low + high) / 2);
-    if (nums[middle] > nums[middle - 1] && nums[middle] > nums[middle + 1]) {
-      return middle;
+    let left = 0, right = nums.length - 1;
+    while (left < right) {
+        const mid = Math.floor((left + right) / 2);
+        if (nums[mid] > nums[mid + 1]) right = mid;
+        else left = mid + 1;
     }
-
-    // move towards higher neigbour
-    if (nums[middle] < nums[middle + 1]) {
-      low = middle + 1;
-    } else {
-      // Peak is on the left side (nums[middle] < nums[middle - 1])
-
-      high = middle - 1;
-    }
-  }
-
-  return -1
+    return left;
 };
