@@ -4,20 +4,24 @@
  * @return {number[]}
  */
 var intersection = function(nums1, nums2) {
-     let n1 = nums1.length;
-  let n2 = nums2.length;
-  let ans = [];
+  nums1.sort((a, b) => a - b); 
+  nums2.sort((a, b) => a - b);
+  let n = nums1.length;
+  let m = nums2.length;
   let i = 0;
-  let myMap = new Map();
-  while (i < n1) {
-    myMap.set(nums1[i], (myMap.get(nums1[i]) || 0) + 1);
-    i++;
-  }
-
-  for (let j = 0; j < n2; j++) {
-    if (myMap.has(nums2[j]) && myMap.get(nums2[j]) > 0) {
-      ans.push(nums2[j]);
-      myMap.set(nums2[j], 0);
+  let j = 0;
+  let ans = [];
+  while (i < n && j < m) {
+    if (nums1[i] < nums2[j]) {
+      i++;
+    } else if (nums2[j] < nums1[i]) {
+      j++;
+    } else {
+     if (ans.length === 0 || ans[ans.length - 1] !== nums1[i]) {
+                ans.push(nums1[i]);
+     }
+      i++;
+      j++;
     }
   }
   return ans;
