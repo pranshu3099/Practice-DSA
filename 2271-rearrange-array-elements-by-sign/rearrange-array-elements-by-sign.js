@@ -3,25 +3,18 @@
  * @return {number[]}
  */
 var rearrangeArray = function(nums) {
+  let ans = [];
   let n = nums.length;
-  let pos = [];
-  let neg = [];
+  let posIndex = 0;
+  let negIndex = 1;
   for (let i = 0; i < n; i++) {
-    if (nums[i] < 0) neg.push(nums[i]);
-    else pos.push(nums[i]);
-  }
-
-  if (pos.length >= neg.length) {
-    for (let i = 0; i < neg.length; i++) {
-      nums[2 * i] = pos[i];
-      nums[2 * i + 1] = neg[i];
-    }
-  } else if (neg.length >= pos.length) {
-    for (let i = 0; i < pos.length; i++) {
-      nums[2 * i] = pos[i];
-      nums[2 * i + 1] = neg[i];
+    if (nums[i] < 0) {
+      ans[negIndex] = nums[i];
+      negIndex += 2;
+    } else {
+      ans[posIndex] = nums[i];
+      posIndex += 2;
     }
   }
-
-  return nums;
+  return ans;
 };
