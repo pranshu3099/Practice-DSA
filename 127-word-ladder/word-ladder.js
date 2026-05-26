@@ -17,7 +17,7 @@ var ladderLength = function(beginWord, endWord, wordList) {
         const [word, level] = queue[start++];
         if(word === endWord) return level;
         const wordArr = word.split('');
-        for(let i = 0; i<word.length; i++){
+        for(let i = 0; i<wordArr.length; i++){
             const originalChar = word[i];
             for(let charCode = 97; charCode <= 122; charCode++) {
                 const newChar = String.fromCharCode(charCode);
