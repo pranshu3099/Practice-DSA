@@ -4,38 +4,36 @@
  * @return {number}
  */
 
-function getMaxElement(piles = []) {
-  let max = -999999;
-  for (let i = 0; i < piles.length; i++) {
-    max = Math.max(piles[i], max);
+function getMaximum(nums = []) {
+  let max = -Infinity;
+  for (let i = 0; i < nums.length; i++) {
+    max = Math.max(max, nums[i]);
   }
   return max;
 }
 
-function calculateHours(hourly, piles) {
-  let totalhrs = 0;
+function getRequiredTime(piles = [], hours) {
+  let totalHours = 0;
   for (let i = 0; i < piles.length; i++) {
-    totalhrs = totalhrs + Math.ceil(piles[i] / hourly);
+    totalHours = totalHours + Math.ceil(piles[i] / hours);
   }
-  return totalhrs;
+  return totalHours;
 }
 
 
-
 var minEatingSpeed = function(piles, h) {
-  let maxELement = getMaxElement(piles);
   let low = 1;
-  let high = maxELement;
-  let ans = 99999;
+  let high = getMaximum(piles);
+  let ans = Infinity;
   while (low <= high) {
-    let middle = Math.floor((low + high) / 2); // hourly banana eating rate
-    let Totalhrs = calculateHours(middle, piles);
-    if (Totalhrs <= h) {
-      ans = middle;
-      high = middle - 1;
+    let mid = Math.floor((low + high) / 2);
+    let requiredTime = getRequiredTime(piles, mid);
+    if (requiredTime <= h) {
+      ans = mid;
+      high = mid - 1;
     } else {
-      low = middle + 1;
+      low = mid + 1;
     }
   }
-  return ans
+  return ans;
 };
