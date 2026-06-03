@@ -3,35 +3,33 @@
  * @param {number} threshold
  * @return {number}
  */
-
- function getMaxElement(nums = []) {
-  let max = -999999;
+function getMaximum(nums = []) {
+  let max = -Infinity;
   for (let i = 0; i < nums.length; i++) {
-    max = Math.max(nums[i], max);
+    max = Math.max(max, nums[i]);
   }
   return max;
 }
 
-function getAddition(nums = [], div) {
+function Ispossible(nums = [], divisor, thresHold) {
   let sum = 0;
-  for (let i = 0; i < nums.length; i++) {
-    sum = sum + Math.ceil(nums[i] / div);
+  let n = nums.length;
+  for (let i = 0; i < n; i++) {
+    sum += Math.ceil(nums[i] / divisor);
   }
-  return sum;
+  return sum <= thresHold;
 }
+
 var smallestDivisor = function(nums, threshold) {
   let low = 1;
-  let high = getMaxElement(nums);
-  let ans = -1;
+  let high = getMaximum(nums);
   while (low <= high) {
-    let div = Math.floor((low + high) / 2);
-    let sum = getAddition(nums, div);
-    if (sum <= threshold) {
-      ans = div;
-      high = div - 1;
+    let mid = Math.floor((low + high) / 2);
+    if (Ispossible(nums, mid, threshold)) {
+      high = mid - 1;
     } else {
-      low = div + 1;
+      low = mid + 1;
     }
   }
-  return ans;
+  return low;
 };
