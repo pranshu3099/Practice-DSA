@@ -4,23 +4,17 @@
  * @return {number}
  */
 var findKthPositive = function(arr, k) {
-    let low = 0;
-    let high = arr.length-1;
-    while(low <=high){
-        let mid = Math.floor((low+high)/2);
-        let missingCount = arr[mid] - (mid+1);
-        if(missingCount < k){
-            low = mid +1;
-        }
-        else{
-            high = mid-1
-        }
+  let n = arr.length;
+  let low = 0;
+  let high = n - 1;
+  while (low <= high) {
+    let mid = Math.floor((low + high) / 2);
+    let misssingNumberAtIndex = arr[mid] - (mid + 1)
+    if (k > misssingNumberAtIndex) {
+      low = mid + 1; // because 5 > misssingNumberAtIndex which is 1 so left portion can be eleminated
+    } else {
+      high = mid - 1;
     }
-
-    if(high === -1){
-        return k;
-    }
-    let missingRight = arr[high] - (high+1);
-    let missingNumber = arr[high] + (k-missingRight)
-    return missingNumber
+  }
+   return low + k;
 };
