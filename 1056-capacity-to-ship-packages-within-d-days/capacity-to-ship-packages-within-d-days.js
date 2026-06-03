@@ -4,51 +4,46 @@
  * @return {number}
  */
 
-function getMinElement(weights = []) {
-  let min = -999999;
-  for (let i = 0; i < weights.length; i++) {
-    min = Math.max(weights[i], min);
+function getMinimum(nums = []) {
+  let max = -Infinity;
+  for (let i = 0; i < nums.length; i++) {
+    max = Math.max(max, nums[i]);
   }
-  return min;
+  return max;
 }
 
-function getMaxElement(weights = []) {
+function getMaximum(nums = []) {
   let sum = 0;
-  for (let i = 0; i < weights.length; i++) {
-    sum = sum + weights[i];
+  for (let i = 0; i < nums.length; i++) {
+    sum = sum + nums[i];
   }
   return sum;
 }
 
-function calculateActualDays(weights = [], min_capacity) {
-  let num_of_days = 0;
-  let capacity = 0;
+function daysRequired(weights, capacity, days) {
+  let DayCount = 1;
+  let weightCount = 0;
   for (let i = 0; i < weights.length; i++) {
-    capacity = capacity + weights[i];
-
-    if (capacity > min_capacity) {
-      capacity = weights[i];
-      num_of_days += 1;
-    }
-  }
-
-  num_of_days = num_of_days + 1;
-
-  return num_of_days;
-}
-var shipWithinDays = function(weights, days) {
-  let low = getMinElement(weights);
-  let high = getMaxElement(weights);
-  let ans = -1;
-  while (low <= high) {
-    let min_capacity = Math.floor((low + high) / 2);
-    let Actualdays = calculateActualDays(weights, min_capacity);
-    if (Actualdays <= days) {
-      ans = min_capacity;
-      high = min_capacity - 1;
+    if (weightCount + weights[i] > capacity) {
+      DayCount++;
+      weightCount = weights[i];
     } else {
-      low = min_capacity + 1;
+      weightCount += weights[i];
     }
   }
-  return ans;
+  return DayCount <= days;
+}
+
+var shipWithinDays = function(weights, days) {
+  let low = getMinimum(weights);
+  let high = getMaximum(weights);
+  while (low <= high) {
+    let mid = Math.floor((low + high) / 2);
+    if (daysRequired(weights, mid, days)) {
+      high = mid - 1;
+    } else {
+      low = mid + 1;
+    }
+  }
+  return low
 };
