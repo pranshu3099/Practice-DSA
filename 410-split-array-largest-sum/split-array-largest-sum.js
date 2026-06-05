@@ -3,16 +3,15 @@
  * @param {number} k
  * @return {number}
  */
-
-function getMinElement(nums = []) {
-  let min = -999999;
+function getLargestElement(nums = []) {
+  let max = -Infinity;
   for (let i = 0; i < nums.length; i++) {
-    min = Math.max(nums[i], min);
+    max = Math.max(max, nums[i]);
   }
-  return min;
+  return max;
 }
 
-function getMaxElement(nums = []) {
+function getTotalSum(nums = []) {
   let sum = 0;
   for (let i = 0; i < nums.length; i++) {
     sum = sum + nums[i];
@@ -20,35 +19,32 @@ function getMaxElement(nums = []) {
   return sum;
 }
 
-function isPossible(nums = [], k) {
-  let count = 1;
-  let total_nums = 0;
+function countSubarrays(nums = [], maxAllowedSum) {
+  let currentSum = 0;
+  let subarrays = 1;
   for (let i = 0; i < nums.length; i++) {
-    if (total_nums + nums[i] > k) {
-      count = count + 1;
-      total_nums = nums[i];
+    if (currentSum + nums[i] <= maxAllowedSum) {
+      currentSum += nums[i];
     } else {
-      total_nums = total_nums + nums[i];
+      subarrays += 1;
+      currentSum = nums[i];
     }
   }
-
-  return count;
+  return subarrays;
 }
 
 var splitArray = function(nums, k) {
-  if (k > nums.length) return -1;
-  let low = getMinElement(nums);
-  let high = getMaxElement(nums);
-  let ans = -1;
+  let n = nums.length;
+  if (k > n) return -1;
+  let low = getLargestElement(nums);
+  let high = getTotalSum(nums);
   while (low <= high) {
-    let max_sum = Math.floor((low + high) / 2);
-    let count = isPossible(nums, max_sum);
-    if (count <= k) {
-      ans = max_sum;
-      high = max_sum - 1;
+    let mid = Math.floor((low + high) / 2);
+    if (countSubarrays(nums, mid) > k) {
+      low = mid + 1;
     } else {
-      low = max_sum + 1;
+      high = mid - 1;
     }
   }
-  return ans; 
+  return low;
 };
